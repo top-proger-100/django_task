@@ -33,3 +33,26 @@ class BugReport(models.Model):
     ])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class FeatureRequest(models.Model):
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+    )
+    task = models.ForeignKey(
+        Task,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
+    status = [
+        ('Consideration', 'Рассмотрение'),
+        ('Accepted', 'Принято'),
+        ('Rejected', 'Отклонено'),
+    ]
+    priority = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
