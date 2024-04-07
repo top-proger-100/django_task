@@ -19,11 +19,11 @@ class BugReport(models.Model):
         null=True,
         blank=True
     )
-    status = [
+    status = models.CharField(max_length=50, choices=[
         ('New', 'Новая'),
         ('In_progress', 'В работе'),
         ('Completed', 'Завершена'),
-    ]
+    ], default='New')
     priority = models.IntegerField(choices=[
         (1, '1 балл'),
         (2, '2 балла'),
@@ -48,11 +48,11 @@ class FeatureRequest(models.Model):
         null=True,
         blank=True
     )
-    status = [
+    status = models.CharField(max_length=50, choices=[
         ('Consideration', 'Рассмотрение'),
         ('Accepted', 'Принято'),
         ('Rejected', 'Отклонено'),
-    ]
+    ], default='Consideration')
     priority = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
