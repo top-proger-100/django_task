@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
+from django.views.generic import DetailView
 
 from quality_control.models import BugReport
 
@@ -30,8 +31,22 @@ def feature_list(request):
     return HttpResponse("<h1>Список запросов на улучшение</h1>")
 
 
-def bug_detail(request, bug_id):
-    return HttpResponse(f"Детали бага {bug_id}")
+class BugDetailView(DetailView):
+    model = BugReport
+    pk_url_kwarg = 'bug_id'
+
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        html = f'''
+            <h1>Детали бага {obj.id}</h1>
+            <p>Название: {obj.title}</p>
+            <p>Описание: {obj.description}</p>
+            <p>Статус: {obj.status}</p>
+            <p>Приоритет: {obj.priority}</p>
+            <p>Связанный проект: {obj.project}</p>
+            <p>Связанная задача: {obj.task}</p>
+        '''
+        return HttpResponse(html)
 
 
 def feature_detail(request, feature_id):
