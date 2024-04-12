@@ -32,25 +32,12 @@ class BugDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
-        html = f'''
-            <h1>Детали бага {obj.id}</h1>
-            <p>Название: {obj.title}</p>
-            <p>Описание: {obj.description}</p>
-            <p>Статус: {obj.status}</p>
-            <p>Приоритет: {obj.priority}</p>
-            <p>Связанный проект: {obj.project}</p>
-            <p>Связанная задача: {obj.task}</p>
-        '''
-        return HttpResponse(html)
+        return render(request, 'quality_control/bug_detail.html', {'bug': obj})
 
 
 def feature_list(request):
     feature_request = FeatureRequest.objects.all()
-    html = f"<h1>Cписок запросов на улучшение</h1><ul>"
-    for record in feature_request:
-        html += f'<li><a href="{record.id}">{record.title}</a> | {record.status}</li>'
-    html += '</ul>'
-    return HttpResponse(html)
+    return render(request, 'quality_control/features.html', {'feature_list': feature_request})
 
 
 class FeatureDetailView(DetailView):

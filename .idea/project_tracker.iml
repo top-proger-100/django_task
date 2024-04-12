@@ -14,7 +14,7 @@
   <component name="PyNamespacePackagesService">
     <option name="namespacePackageFolders">
       <list>
-        <option value="$MODULE_DIR$/project_tracker/tasks/templates" />
+        <option value="$MODULE_DIR$/project_tracker/templates" />
       </list>
     </option>
   </component>
