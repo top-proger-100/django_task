@@ -56,4 +56,3 @@ class TaskDetailView(DetailView):
     model = Task
     pk_url_kwarg = 'task_id'
     template_name = 'tasks/task_detail.html'
-    
