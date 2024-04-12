@@ -3,8 +3,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView
-
-from quality_control.models import BugReport
+from quality_control.models import BugReport, FeatureRequest
 
 
 # Create your views here.
@@ -27,10 +26,6 @@ def bug_list(request):
     return HttpResponse(html)
 
 
-def feature_list(request):
-    return HttpResponse("<h1>Список запросов на улучшение</h1>")
-
-
 class BugDetailView(DetailView):
     model = BugReport
     pk_url_kwarg = 'bug_id'
@@ -49,5 +44,29 @@ class BugDetailView(DetailView):
         return HttpResponse(html)
 
 
-def feature_detail(request, feature_id):
-    return HttpResponse(f"Детали улучшения {feature_id}")
+def feature_list(request):
+    feature_request = FeatureRequest.objects.all()
+    html = f"<h1>Cписок запросов на улучшение</h1><ul>"
+    for record in feature_request:
+        html += f'<li><a href="{record.id}">{record.title}</a> | {record.status}</li>'
+    html += '</ul>'
+    return HttpResponse(html)
+
+
+class FeatureDetailView(DetailView):
+    model = FeatureRequest
+    pk_url_kwarg = 'feature_id'
+
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        html = f'''
+            <h1>Детали улучшения {obj.id}</h1>
+            <p>Название: {obj.title}</p>
+            <p>Описание: {obj.description}</p>
+            <p>Статус: {obj.status}</p>
+            <p>Приоритет: {obj.priority}</p>
+            <p>Связанный проект: {obj.project}</p>
+            <p>Связанная задача: {obj.task}</p>
+        '''
+        return HttpResponse(html)
+

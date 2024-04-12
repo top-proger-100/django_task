@@ -8,5 +8,5 @@ urlpatterns = [
     path('bugs/', views.bug_list, name='bugs'),
     path('features/', views.feature_list, name='features'),
     path('bugs/<int:bug_id>/', views.BugDetailView.as_view()),
-    path('features/<int:feature_id>/', views.feature_detail),
+    path('features/<int:feature_id>/', views.FeatureDetailView.as_view()),
 ]
