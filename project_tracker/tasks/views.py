@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
 
+from .forms import FeedbackForm
 from .models import Project, Task
 
 
@@ -56,3 +57,14 @@ class TaskDetailView(DetailView):
     model = Task
     pk_url_kwarg = 'task_id'
     template_name = 'tasks/task_detail.html'
+
+
+def feedback_view(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            # Обработка данных формы
+            return redirect('/tasks')
+    else:
+        form = FeedbackForm()
+    return render(request, 'tasks/feedback.html', {'form': form})
