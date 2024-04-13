@@ -41,3 +41,6 @@ class FeatureDetailView(DetailView):
         obj = self.get_object()
         return render(request, 'quality_control/feature_detail.html', {'feature': obj})
 
+
+def bug_report_create(request):
+    pass
