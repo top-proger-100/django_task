@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import FeedbackForm, ProjectForm, TaskForm
 from .models import Project, Task
@@ -93,3 +93,23 @@ def add_task_to_project(request, project_id):
     else:
         form = TaskForm()
     return render(request, 'tasks/add_task.html', {'form': form, 'project': project})
+
+
+class ProjectCreateView(CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'tasks/project_create.html'
+    success_url = reverse_lazy('tasks:projects_list')
+
+
+class TaskCreateView(CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'tasks/add_task.html'
+
+    def form_valid(self, form):
+        form.instance.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('tasks:project_detail', kwargs={'project_id': self.kwargs['project_id']})
