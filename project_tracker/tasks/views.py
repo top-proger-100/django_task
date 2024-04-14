@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from .forms import FeedbackForm, ProjectForm, TaskForm
 from .models import Project, Task
@@ -167,3 +167,18 @@ def delete_task(request, project_id, task_id):
     task = get_object_or_404(Task, pk=task_id)
     task.delete()
     return redirect('tasks:project_detail', project_id=project_id)
+
+
+class ProjectDeleteView(DeleteView):
+    model = Project
+    pk_url_kwarg = 'project_id'
+    success_url = reverse_lazy('tasks:projects_list')
+    template_name = 'tasks/project_confirm_delete.html'
+
+
+class TaskDeleteView(DeleteView):
+    model = Task
+    pk_url_kwarg = 'task_id'
+
+    def get_success_url(self):
+        return reverse_lazy('tasks:project_detail', kwargs={'project_id': self.object.project.id})
