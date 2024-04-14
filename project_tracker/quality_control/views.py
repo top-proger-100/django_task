@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, CreateView, ListView
+from django.views.generic import DetailView, CreateView, ListView, UpdateView
 from quality_control.models import BugReport, FeatureRequest
 from quality_control.forms import BugReportForm, FeatureRequestForm
 
@@ -102,3 +102,49 @@ class FeatureDetailView(DetailView):
 def feature_detail_view(request, feature_id):
     obj = get_object_or_404(FeatureRequest, id=feature_id)
     return render(request, 'quality_control/bug_detail.html', {'feature': obj})
+
+
+# update
+
+class BugUpdateView(UpdateView):
+    model = BugReport
+    form_class = BugReportForm
+    template_name = 'quality_control/bug_update.html'
+    pk_url_kwarg = 'bug_id'
+    context_object_name = 'bug'
+    def get_success_url(self):
+        return reverse_lazy('quality_control:bug_detail', kwargs={'bug_id': self.object.id})
+
+
+def update_bug(request, bug_id):
+    bug = get_object_or_404(BugReport, pk=bug_id)
+    if request.method == 'POST':
+        form = BugReportForm(request.POST, instance=bug)
+        if form.is_valid():
+            form.save()
+            return redirect('quality_control:bug_detail', bug_id=bug.id)
+    else:
+        form = BugReportForm(instance=bug)
+    return render(request, 'quality_control/bug_update.html', {'bug': bug, 'form': form})
+
+
+class FeatureUpdateView(UpdateView):
+    model = FeatureRequest
+    form_class = FeatureRequestForm
+    template_name = 'quality_control/feature_update.html'
+    pk_url_kwarg = 'feature_id'
+    context_object_name = 'feature'
+    def get_success_url(self):
+        return reverse_lazy('quality_control:feature_detail', kwargs={'feature_id': self.object.id})
+
+
+def update_feature(request, feature_id):
+    feature = get_object_or_404(FeatureRequest, pk=feature_id)
+    if request.method == 'POST':
+        form = FeatureRequestForm(request.POST, instance=feature)
+        if form.is_valid():
+            form.save()
+            return redirect('quality_control:feature_detail', feature_id=feature.id)
+    else:
+        form = FeatureRequestForm(instance=feature)
+    return render(request, 'quality_control/feature_update.html', {'feature': feature, 'form': form})

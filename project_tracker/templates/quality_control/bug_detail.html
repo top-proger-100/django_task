@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Детали бага {{bug.id}}</h1>
+    <a href="{% url 'quality_control:bug_update' bug.id %}">Изменить детали бага</a>
     <p>Название: {{bug.title}}</p>
     <p>Описание: {{bug.description}}</p>
     <p>Статус: {{bug.status}}</p>

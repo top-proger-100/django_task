@@ -2,6 +2,7 @@
 
 {% block content %}
     <h1>Детали улучшения {{feature.id}}</h1>
+    <a href="{% url 'quality_control:feature_update' feature.id %}">Изменить детали улучшения</a>
     <p>Название: {{feature.title}}</p>
     <p>Описание: {{feature.description}}</p>
     <p>Статус: {{feature.status}}</p>
