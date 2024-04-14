@@ -21,4 +21,8 @@ urlpatterns = [
     # path('bugs/<int:bug_id>/update/', views.update_bug, name='bug_update'),
     path('features/<int:feature_id>/update/', views.FeatureUpdateView.as_view(), name='feature_update'),
     # path('features/<int:feature_id>/update/', views.update_feature, name='feature_update'),
+    # path('bugs/<int:bug_id>/delete/', views.BugDeleteView.as_view(), name='bug_delete'),
+    path('bugs/<int:bug_id>/delete/', views.bug_delete, name='bug_delete'),
+    path('features/<int:feature_id>/delete/', views.FeatureDeleteView.as_view(), name='feature_delete'),
+    # path('features/<int:feature_id>/delete/', views.feature_delete, name='feature_delete'),
 ]

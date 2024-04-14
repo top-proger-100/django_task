@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, CreateView, ListView, UpdateView
+from django.views.generic import DetailView, CreateView, ListView, UpdateView, DeleteView
 from quality_control.models import BugReport, FeatureRequest
 from quality_control.forms import BugReportForm, FeatureRequestForm
 
@@ -148,3 +148,35 @@ def update_feature(request, feature_id):
     else:
         form = FeatureRequestForm(instance=feature)
     return render(request, 'quality_control/feature_update.html', {'feature': feature, 'form': form})
+
+
+# delete
+
+class BugDeleteView(DeleteView):
+    model = BugReport
+    pk_url_kwarg = 'bug_id'
+    success_url = reverse_lazy('quality_control:bugs')
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        return render(request, 'quality_control/bug_delete.html', {'bug': obj})
+
+
+def bug_delete(request, bug_id):
+    bug = get_object_or_404(BugReport, pk=bug_id)
+    bug.delete()
+    return redirect('quality_control:bugs')
+
+
+class FeatureDeleteView(DeleteView):
+    model = FeatureRequest
+    pk_url_kwarg = 'feature_id'
+    success_url = reverse_lazy('quality_control:features')
+    def get(self, request, *args, **kwargs):
+        obj = self.get_object()
+        return render(request, 'quality_control/feature_delete.html', {'feature': obj})
+
+
+def feature_delete(request, feature_id):
+    feature = get_object_or_404(FeatureRequest, pk=feature_id)
+    feature.delete()
+    return redirect('quality_control:features')
