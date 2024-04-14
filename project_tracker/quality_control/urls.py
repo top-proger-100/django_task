@@ -9,5 +9,6 @@ urlpatterns = [
     path('features/', views.feature_list, name='features'),
     path('bugs/<int:bug_id>/', views.BugDetailView.as_view(), name='bug_detail'),
     path('features/<int:feature_id>/', views.FeatureDetailView.as_view(), name='feature_detail'),
-    path('bugs/make_report/', views.bug_report_create, name='bug_report')
+    path('bugs/make_report/', views.bug_report_create, name='bug_report'),
+    path('features/make_request/', views.feature_request_create, name='feature_request')
 ]
