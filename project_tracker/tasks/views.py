@@ -155,3 +155,15 @@ class TaskUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('tasks:task_detail', kwargs={'project_id': self.object.project.id, 'task_id': self.object.id})
+
+
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, pk=project_id)
+    project.delete()
+    return redirect('tasks:projects_list')
+
+
+def delete_task(request, project_id, task_id):
+    task = get_object_or_404(Task, pk=task_id)
+    task.delete()
+    return redirect('tasks:project_detail', project_id=project_id)
