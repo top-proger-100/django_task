@@ -1,8 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, ListView
 from quality_control.models import BugReport, FeatureRequest
 from quality_control.forms import BugReportForm, FeatureRequestForm
 
@@ -52,10 +52,28 @@ def feature_request_create(request):
     return render(request, 'quality_control/feature_request_form.html', {'form': form})
 
 
+# read
+
+class BugListView(ListView):
+    model = BugReport
+    template_name = 'quality_control/bugs.html'
+    context_object_name = 'bug_list'
+
 
 def bug_list(request):
     bug_report = BugReport.objects.all()
     return render(request, 'quality_control/bugs.html', {'bug_list': bug_report})
+
+
+class FeatureListView(ListView):
+    model = FeatureRequest
+    template_name = 'quality_control/features.html'
+    context_object_name = 'feature_list'
+
+
+def feature_list(request):
+    feature_request = FeatureRequest.objects.all()
+    return render(request, 'quality_control/features.html', {'feature_list': feature_request})
 
 
 class BugDetailView(DetailView):
@@ -67,9 +85,9 @@ class BugDetailView(DetailView):
         return render(request, 'quality_control/bug_detail.html', {'bug': obj})
 
 
-def feature_list(request):
-    feature_request = FeatureRequest.objects.all()
-    return render(request, 'quality_control/features.html', {'feature_list': feature_request})
+def bug_detail_view(request, bug_id):
+    obj = get_object_or_404(BugReport, id=bug_id)
+    return render(request, 'quality_control/bug_detail.html', {'bug': obj})
 
 
 class FeatureDetailView(DetailView):
@@ -79,3 +97,8 @@ class FeatureDetailView(DetailView):
     def get(self, request, *args, **kwargs):
         obj = self.get_object()
         return render(request, 'quality_control/feature_detail.html', {'feature': obj})
+
+
+def feature_detail_view(request, feature_id):
+    obj = get_object_or_404(FeatureRequest, id=feature_id)
+    return render(request, 'quality_control/bug_detail.html', {'feature': obj})
