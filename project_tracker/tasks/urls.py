@@ -13,8 +13,8 @@ urlpatterns = [
     #path('project/<int:project_id>/add_task/', views.add_task_to_project, name='add_task_to_project'),
     path('project/create/', views.ProjectCreateView.as_view(), name='create_project'),
     path('project/<int:project_id>/add_task/', views.TaskCreateView.as_view(), name='add_task_to_project'),
-    path('project/<int:project_id>/update/', views.update_project, name='update_project'),
-    path('project/<int:project_id>/task/<int:task_id>/update/', views.update_task, name='update_task'),
+    path('project/<int:project_id>/update/', views.ProjectUpdateView.as_view(), name='update_project'),
+    path('project/<int:project_id>/tasks/<int:task_id>/update/', views.TaskUpdateView.as_view(), name='update_task'),
 ]
 
 # urlpatterns = [

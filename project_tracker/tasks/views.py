@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from .forms import FeedbackForm, ProjectForm, TaskForm
 from .models import Project, Task
@@ -137,3 +137,21 @@ def update_task(request, project_id, task_id):
     else:
         form = TaskForm(instance=task)
     return render(request, 'tasks/task_update.html', {'form': form, 'task': task})
+
+
+class ProjectUpdateView(UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'tasks/project_update.html'
+    pk_url_kwarg = 'project_id'
+    success_url = reverse_lazy('tasks:projects_list')
+
+
+class TaskUpdateView(UpdateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'tasks/task_update.html'
+    pk_url_kwarg = 'task_id'
+
+    def get_success_url(self):
+        return reverse_lazy('tasks:task_detail', kwargs={'project_id': self.object.project.id, 'task_id': self.object.id})
